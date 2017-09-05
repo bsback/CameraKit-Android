@@ -280,40 +280,38 @@ public class Camera1 extends CameraImpl {
     {
         if (sizes == null) return null;
 
-        return new Size(width*2, height*2);
+        double MIN_TOLERANCE = 100;
+        double targetRatio = (double) height / width;
+        Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
 
-//        double MIN_TOLERANCE = 100;
-//        double targetRatio = (double) height / width;
-//        Size optimalSize = null;
-//        double minDiff = Double.MAX_VALUE;
-//
-//        int targetHeight = height;
-//
-//        for (Size size : sizes) {
-//            if (size.getWidth() == width && size.getHeight() == height)
-//                return size;
-//
-//            double ratio = (double) size.getHeight() / size.getWidth();
-//
-//            if (Math.abs(ratio - targetRatio) < MIN_TOLERANCE) MIN_TOLERANCE = ratio;
-//            else continue;
-//
-//            if (Math.abs(size.getHeight() - targetHeight) < minDiff) {
-//                optimalSize = size;
-//                minDiff = Math.abs(size.getHeight() - targetHeight);
-//            }
-//        }
-//
-//        if (optimalSize == null) {
-//            minDiff = Double.MAX_VALUE;
-//            for (Size size : sizes) {
-//                if (Math.abs(size.getHeight() - targetHeight) < minDiff) {
-//                    optimalSize = size;
-//                    minDiff = Math.abs(size.getHeight() - targetHeight);
-//                }
-//            }
-//        }
-//        return optimalSize;
+        int targetHeight = height;
+
+        for (Size size : sizes) {
+            if (size.getWidth() == width && size.getHeight() == height)
+                return size;
+
+            double ratio = (double) size.getHeight() / size.getWidth();
+
+            if (Math.abs(ratio - targetRatio) < MIN_TOLERANCE) MIN_TOLERANCE = ratio;
+            else continue;
+
+            if (Math.abs(size.getHeight() - targetHeight) < minDiff) {
+                optimalSize = size;
+                minDiff = Math.abs(size.getHeight() - targetHeight);
+            }
+        }
+
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Size size : sizes) {
+                if (Math.abs(size.getHeight() - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.getHeight() - targetHeight);
+                }
+            }
+        }
+        return optimalSize;
     }
 
     List<Size> sizesFromList(List<Camera.Size> sizes) {
@@ -339,6 +337,8 @@ public class Camera1 extends CameraImpl {
                 (videoSizes == null || videoSizes.isEmpty()) ? previewSizes : videoSizes,
                 camcorderProfile.videoFrameWidth, camcorderProfile.videoFrameHeight);
 
+
+        mCaptureSize = new Size(mCaptureSize.getWidth()*2, mCaptureSize.getHeight()*2);
         mPreviewSize = getSizeWithClosestRatio(previewSizes, mCaptureSize.getWidth(), mCaptureSize.getHeight());
     }
 
