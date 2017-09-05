@@ -314,17 +314,17 @@ public class Camera1 extends CameraImpl {
         return optimalSize;
     }
 
-    private Camera.Size getBestPreviewSize(List<Size> sizes, int width, int height) {
-        Camera.Size result=null;
+    private Size getBestPreviewSize(List<Size> sizes, int width, int height) {
+        Size result=null;
 
-        for (Camera.Size size : sizes) {
-            if (size.width <= width && size.height <= height) {
+        for (Size size : sizes) {
+            if (size.getWidth() <= width && size.getHeight() <= height) {
                 if (result == null) {
                     result=size;
                 }
                 else {
-                    int resultArea=result.width * result.height;
-                    int newArea=size.width * size.height;
+                    int resultArea=result.getWidth() * result.getHeight();
+                    int newArea=size.getWidth() * size.getHeight();
 
                     if (newArea > resultArea) {
                         result=size;
