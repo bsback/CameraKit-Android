@@ -318,7 +318,7 @@ public class Camera1 extends CameraImpl {
         Size result=null;
 
         for (Size size : sizes) {
-            if (size.getWidth() <= width && size.getHeight() <= height) {
+            if (size.getWidth() >= width && size.getHeight() >= height) {
                 if (result == null) {
                     result=size;
                 }
