@@ -280,6 +280,8 @@ public class Camera1 extends CameraImpl {
     {
         if (sizes == null) return null;
 
+        return new Size(width*2, height*2);
+
         double MIN_TOLERANCE = 100;
         double targetRatio = (double) height / width;
         Size optimalSize = null;
