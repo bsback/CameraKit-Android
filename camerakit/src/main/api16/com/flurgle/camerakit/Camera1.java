@@ -288,15 +288,15 @@ public class Camera1 extends CameraImpl {
         int targetHeight = height;
 
         for (Size size : sizes) {
-//            if (size.getWidth() == width && size.getHeight() == height)
-//                return size;
+            if (size.getWidth() == width && size.getHeight() == height)
+                return size;
 
             double ratio = (double) size.getHeight() / size.getWidth();
 
             if (Math.abs(ratio - targetRatio) < MIN_TOLERANCE) MIN_TOLERANCE = ratio;
             else continue;
 
-            if (Math.abs(size.getHeight() - targetHeight) < minDiff && (optimalSize==null || size.getWidth()>optimalSize.getWidth())) {
+            if (Math.abs(size.getHeight() - targetHeight) < minDiff) {
                 optimalSize = size;
                 minDiff = Math.abs(size.getHeight() - targetHeight);
             }
@@ -312,26 +312,6 @@ public class Camera1 extends CameraImpl {
             }
         }
         return optimalSize;
-    }
-
-    private Size getBestPreviewSize(List<Size> sizes, int width, int height) {
-        Size result=null;
-
-        for (Size size : sizes) {
-            if (result == null) {
-                result=size;
-            }
-            if (size.getWidth() >= width && size.getHeight() >= height) {
-                    int resultArea=result.getWidth() * result.getHeight();
-                    int newArea=size.getWidth() * size.getHeight();
-
-                    if (newArea > resultArea) {
-                        result=size;
-                    }
-            }
-        }
-
-        return(result);
     }
 
     List<Size> sizesFromList(List<Camera.Size> sizes) {
@@ -353,18 +333,11 @@ public class Camera1 extends CameraImpl {
 
         CamcorderProfile camcorderProfile = getCamcorderProfile(mVideoQuality);
 
-//        mCaptureSize = getSizeWithClosestRatio(
-//                (videoSizes == null || videoSizes.isEmpty()) ? previewSizes : videoSizes,
-//                camcorderProfile.videoFrameWidth, camcorderProfile.videoFrameHeight);
-//
-//        mPreviewSize = getSizeWithClosestRatio(previewSizes, mCaptureSize.getWidth(), mCaptureSize.getHeight());
-
-
-        mCaptureSize = getBestPreviewSize(
+        mCaptureSize = getSizeWithClosestRatio(
                 (videoSizes == null || videoSizes.isEmpty()) ? previewSizes : videoSizes,
                 camcorderProfile.videoFrameWidth, camcorderProfile.videoFrameHeight);
 
-        mPreviewSize = getBestPreviewSize(previewSizes, mCaptureSize.getWidth(), mCaptureSize.getHeight());
+        mPreviewSize = getSizeWithClosestRatio(previewSizes, mCaptureSize.getWidth(), mCaptureSize.getHeight());
     }
 
     @Override
