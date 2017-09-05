@@ -318,18 +318,16 @@ public class Camera1 extends CameraImpl {
         Size result=null;
 
         for (Size size : sizes) {
+            if (result == null) {
+                result=size;
+            }
             if (size.getWidth() >= width && size.getHeight() >= height) {
-                if (result == null) {
-                    result=size;
-                }
-                else {
                     int resultArea=result.getWidth() * result.getHeight();
                     int newArea=size.getWidth() * size.getHeight();
 
                     if (newArea > resultArea) {
                         result=size;
                     }
-                }
             }
         }
 
